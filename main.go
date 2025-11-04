@@ -1,7 +1,11 @@
+/*
+Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+
+*/
 package main
 
-import "log"
+import "github.com/skarekroe666/dockup/cmd"
 
 func main() {
-	log.Println("Welcome to Dockup")
+	cmd.Execute()
 }
