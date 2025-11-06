@@ -1,23 +1,39 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 
+	containertypes "github.com/docker/docker/api/types/container"
 	"github.com/spf13/cobra"
 )
 
-var runningContainer = []string{}
+// var runningContainer = []string{}
 
 var ContainerCmd = &cobra.Command{
-	Use:   "container [command] [flags]",
+	Use:   "container ",
 	Short: "run the container",
 	Run: func(cmd *cobra.Command, args []string) {
-		// RunContainer()
-		err := cmd.Help()
-		if err != nil {
-			log.Fatal(err)
-		}
+		// err := cmd.Help()
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		listContainer()
 	},
+}
+
+func listContainer() {
+	ctx, cli := dockerClient()
+	defer cli.Close()
+
+	containers, err := cli.ContainerList(ctx, containertypes.ListOptions{All: true})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, container := range containers {
+		fmt.Printf("%s\t%s\n", container.ID[:12], container.Image)
+	}
 }
 
 func init() {

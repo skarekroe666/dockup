@@ -18,13 +18,15 @@ var imagesCmd = &cobra.Command{
 
 func listImage() {
 	ctx, cli := dockerClient()
+	defer cli.Close()
+
 	images, err := cli.ImageList(ctx, image.ListOptions{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, image := range images {
-		fmt.Println(image.ID)
+		fmt.Printf("%s\t%s\n", image.ID[:12], image.RepoTags)
 	}
 }
 
