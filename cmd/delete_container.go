@@ -12,7 +12,7 @@ import (
 
 var deleteAll bool
 
-var deleteCmd = &cobra.Command{
+var deleteConCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a container",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -79,7 +79,7 @@ func deleteContainer() {
 	}
 
 	prompt = promptui.Select{
-		Label: "Are you sure you want ot delete " + selection[:7] + " ?",
+		Label: "Are you sure you want ot delete " + selection + " ?",
 		Items: []string{"Yes", "No"},
 	}
 
@@ -103,6 +103,6 @@ func deleteContainer() {
 }
 
 func init() {
-	ContainerCmd.AddCommand(deleteCmd)
-	deleteCmd.Flags().BoolVarP(&deleteAll, "a", "", false, "Delete all containers")
+	ContainerCmd.AddCommand(deleteConCmd)
+	deleteConCmd.Flags().BoolVarP(&deleteAll, "all", "a", false, "Delete all containers")
 }
