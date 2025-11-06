@@ -8,10 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// var runningContainer = []string{}
+var listOfContainers = []string{}
 
 var ContainerCmd = &cobra.Command{
-	Use:   "container ",
+	Use:   "container [command] [flags]",
 	Short: "run the container",
 	Run: func(cmd *cobra.Command, args []string) {
 		// err := cmd.Help()
