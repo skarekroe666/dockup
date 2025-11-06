@@ -1,4 +1,3 @@
-(The file `/home/skarekroe/code/go/cli/dockup/README.md` exists, but is empty)
 # dockup
 
 dockup is a small CLI to inspect and clean up Docker containers and images.
