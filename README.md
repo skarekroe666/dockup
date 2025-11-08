@@ -91,6 +91,12 @@ Examples:
 
 # delete all containers (interactive confirmation)
 ./dockup container delete -a
+
+# remove an image (interactive)
+./dockup image rmi
+
+# delete all images (interactive confirmation)
+./dockup image rmi -a
 ```
 
 ## Why `./dockup image <arg>` prints the same digest
