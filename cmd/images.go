@@ -8,6 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var listOfImages = []string{}
+
 var imagesCmd = &cobra.Command{
 	Use:   "image",
 	Short: "Use this command to list all the images",
