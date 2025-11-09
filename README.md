@@ -1,8 +1,44 @@
 # dockup
 
-dockup is a small CLI to inspect and clean up Docker containers and images.
+A CLI tool for managing Docker containers and images.
 
-It is a thin wrapper around the Docker Engine API using the official Go docker client. The CLI reads the Docker host address from an environment variable (`DOCKER_HOST`) loaded from a `.env` file in the project root.
+## Docker Host Configuration
+
+The tool requires a Docker host connection, which is configured through the `DOCKER_HOST` environment variable in a `.env` file. Here's how to set it up:
+
+1. Create a `.env` file in the project root:
+
+```env
+# For local Docker socket (Linux/macOS/Windows with WSL2):
+DOCKER_HOST=unix:///var/run/docker.sock
+
+# For Docker Desktop over TCP:
+DOCKER_HOST=tcp://host.docker.internal:2375  # macOS/Windows
+# or
+DOCKER_HOST=tcp://docker-desktop:2375        # some setups
+```
+
+Replace `host.docker.internal` or `docker-desktop` with your Docker Desktop host's actual hostname.
+
+> **Note**: Using TCP without TLS (port 2375) is insecure and should only be used for local development.
+
+## How the Code Reads Docker Host
+
+The Docker host configuration is handled in `cmd/list.go`:
+
+```go
+func loadEnv() (string, error) {
+    if err := godotenv.Load(); err != nil {
+        return "", fmt.Errorf("couldn't load .env file: %w", err)
+    }
+    return os.Getenv("DOCKER_HOST"), nil
+}
+```
+
+This function:
+1. Loads the `.env` file from the project root
+2. Returns the value of `DOCKER_HOST` environment variable
+3. The value is then used to create a new Docker client
 
 ## Features
 
@@ -75,7 +111,8 @@ Available commands (from the codebase):
 	- `container delete` — interactive delete of a container
 		- `-a` or `--all` to delete all containers (interactive confirmation)
 - `image` — list images
-- `rename` — planned (currently not implemented)
+	- `image rmi` — interactive delete of an image
+		- `a` or `all` to delete all images(interactive cofirmation)
 
 Examples:
 
@@ -98,10 +135,6 @@ Examples:
 # delete all images (interactive confirmation)
 ./dockup image rmi -a
 ```
-
-## Why `./dockup image <arg>` prints the same digest
-
-The `image` command implemented in `cmd/images.go` is a simple "list all images" command — it does not currently accept or use additional arguments. Passing arguments after `image` will be ignored by the current implementation and you'll always get the same listing output (the command prints image IDs and their tags). If you need `image` to filter by name/tag or accept arguments, that behavior must be implemented in the code (e.g. parse `args` inside the command's `Run` function and pass filter options to `cli.ImageList`).
 
 ## Where the code reads the Docker host
 
