@@ -12,7 +12,7 @@ var listOfContainers = []string{}
 
 var ContainerCmd = &cobra.Command{
 	Use:   "container [command] [flags]",
-	Short: "run the container",
+	Short: "Use this command to list all the containers",
 	Run: func(cmd *cobra.Command, args []string) {
 		listContainer()
 	},

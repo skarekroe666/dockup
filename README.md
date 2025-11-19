@@ -22,30 +22,12 @@ Replace `host.docker.internal` or `docker-desktop` with your Docker Desktop host
 
 > **Note**: Using TCP without TLS (port 2375) is insecure and should only be used for local development.
 
-## How the Code Reads Docker Host
-
-The Docker host configuration is handled in `cmd/list.go`:
-
-```go
-func loadEnv() (string, error) {
-    if err := godotenv.Load(); err != nil {
-        return "", fmt.Errorf("couldn't load .env file: %w", err)
-    }
-    return os.Getenv("DOCKER_HOST"), nil
-}
-```
-
-This function:
-1. Loads the `.env` file from the project root
-2. Returns the value of `DOCKER_HOST` environment variable
-3. The value is then used to create a new Docker client
-
 ## Features
 
 - List containers
 - List images
 - Interactively delete containers (single or all)
-- (Planned) Rename containers
+- Interactively delete images (single or all)
 
 ## Prerequisites
 
@@ -135,15 +117,6 @@ Examples:
 # delete all images (interactive confirmation)
 ./dockup image rmi -a
 ```
-
-## Where the code reads the Docker host
-
-The code that reads the `.env` file and returns the client is in `cmd/list.go`:
-
-- `loadEnv()` loads `.env` and returns `DOCKER_HOST`.
-- `dockerClient()` creates the Docker client with `client.NewClientWithOpts(client.WithHost(host), client.WithAPIVersionNegotiation())`.
-
-If you want to change how the host is discovered (for example to prefer environment variables set in the shell over `.env`), update `loadEnv()` accordingly.
 
 ## Troubleshooting
 
